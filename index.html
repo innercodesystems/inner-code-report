@@ -283,6 +283,17 @@
 
 /* PAYPAL SANDBOX CHECKOUT · purchase gate */
 .paywall-card{text-align:center}.paywall-price{font-size:34px;font-weight:900;color:var(--cream);margin:8px 0}.paywall-price small{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:5px}.paywall-status{min-height:20px;margin-top:12px;color:var(--muted);font-size:13px;line-height:1.5}.paywall-status.ok{color:#b9d7a8}.paywall-status.err{display:block;color:#e6b7a9}.paypal-wrap{margin-top:16px;min-height:45px}.sandbox-note{font-size:11px;color:#8f826e;margin-top:12px;line-height:1.5}@media print{#s0{display:none!important}}
+/* PRINT COVER · definitive name/rule spacing */
+@media print{
+  #printCover #printPersonName{
+    margin:8mm 0 10mm!important;
+    padding:0 0 2mm!important;
+    line-height:1.25!important;
+  }
+  #printCover .print-rule{
+    margin:0 0 8mm!important;
+  }
+}
 /* PRINT FIRST PAGE · title breathing room */
 @media print{
   #s3 > .hero{
