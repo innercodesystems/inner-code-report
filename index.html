@@ -201,6 +201,20 @@
 @media print{body .card.theme-worlds-card,body .card:has(> #themeWorlds){display:none!important}}
 @media print{.build-badge{display:none!important}}
 
+/* PRINT INFO PANELS · keep dark box and make text readable */
+@media print{
+  .info-panel{
+    background:#171512!important;
+    color:#fff!important;
+  }
+  .info-panel p,.info-panel span,.info-panel li{
+    color:#fff!important;
+  }
+  .info-panel b,.info-panel strong{
+    color:#d4a03a!important;
+  }
+}
+
 /* ONLINE INFO PANELS · improve readability without changing print/report layout */
 @media screen{
   .info-panel{
