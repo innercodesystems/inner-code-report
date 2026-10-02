@@ -352,7 +352,7 @@ function toggleQuickMore(){let m=document.getElementById('quickMore');if(m)m.cla
 function quickJump(id){let m=document.getElementById('quickMore');if(m)m.classList.remove('on');let g=document.getElementById('floatingGuide');if(g)g.classList.remove('on');jumpTo(id)}
 function updateQuickNav(){let q=document.getElementById('quickNav'),r=document.getElementById('s3');if(!q||!r)return;q.classList.toggle('show',r.classList.contains('on'))}
 function jumpTo(id){let e=document.getElementById(id);if(e)e.scrollIntoView({behavior:'smooth',block:'start'})}
-function newPerson(){try{localStorage.removeItem('icsInnerCodeState')}catch(e){}['name','date','time','place'].forEach(id=>{let el=document.getElementById(id);if(el)el.value=''});let er=document.getElementById('err');if(er){er.textContent='';er.style.display='none'}window.scrollTo(0,0)}
+function newPerson(){try{localStorage.removeItem('innerCodeReportState')}catch(e){}['name','date','time','place'].forEach(id=>{let el=document.getElementById(id);if(el)el.value=''});let er=document.getElementById('err');if(er){er.textContent='';er.style.display='none'}window.scrollTo(0,0)}
 function go(n){document.querySelectorAll('.step').forEach(x=>x.classList.remove('on'));document.getElementById('s'+n).classList.add('on');scrollTo(0,0)}
 function norm(x){return (x%360+360)%360} function rad(x){return x*Math.PI/180} function deg(x){return x*180/Math.PI}
 function jd(d){return d.getTime()/86400000+2440587.5}
@@ -673,9 +673,9 @@ document.getElementById('icsBridge').innerHTML='<a class="code-chip ics-link" hr
 document.getElementById('actionSteps').innerHTML='<div class="reflection"><b>1 · REALISIEREN</b><br>Beobachte, wo dein Kern „'+core[si]+'“ gerade tatsächlich gelebt wird – und wo nicht.</div><div class="reflection"><b>2 · ERKENNEN</b><br>Prüfe vor wichtigen Entscheidungen dein emotionales Bedürfnis nach '+emotionalDat[mi]+'.</div><div class="reflection"><b>3 · TRANSFORMIEREN</b><br>Wähle eine konkrete Handlung, in der du '+drive[idx(pSign.Mars)]+' kannst, ohne Kern oder Gefühl zu übergehen.</div>';
 document.getElementById('dailyCode').textContent='Bevor du eine wichtige Entscheidung triffst, prüfe drei Ebenen: Passt sie zu dem, was du wirklich willst? Bekommt dein emotionales Bedürfnis nach '+emotionalDat[mi]+' genügend Raum? Und kannst du den nächsten Schritt auf eine Weise gehen, die sich '+outward[ai]+' anfühlt? Wenn alle drei Ebenen miteinander sprechen, handelst du näher an deinem INNER CODE.';
 document.getElementById('reflectionQuestions').innerHTML='<div class="reflection">1. Wo lebe ich bereits '+coreNoun[si]+' – und wo halte ich mich dabei noch zurück?</div><div class="reflection">2. Woran merke ich frühzeitig, dass mein Bedürfnis nach '+emotionalDat[mi]+' zu kurz kommt?</div><div class="reflection">3. Wo hilft mir meine Art, '+outward[ai]+' auf das Leben zuzugehen – und wann darf ich bewusst anders reagieren?</div><div class="reflection">4. Welche Entscheidung würde ich heute treffen, wenn Kern, Gefühl und Wirkung gleichzeitig berücksichtigt wären?</div>';
-try{localStorage.setItem('icsInnerCodeState',JSON.stringify({name:n,date:ds,time:ts,place:p,savedAt:Date.now()}))}catch(e){}go(3);updateQuickNav()}catch(e){er.textContent=e.message||'Die Berechnung konnte gerade nicht abgeschlossen werden.';er.style.display='block'}finally{calc.disabled=false;calc.textContent='MEINEN CODE BERECHNEN'}}
+try{localStorage.setItem('innerCodeReportState',JSON.stringify({name:n,date:ds,time:ts,place:p,savedAt:Date.now()}))}catch(e){}go(3);updateQuickNav()}catch(e){er.textContent=e.message||'Die Berechnung konnte gerade nicht abgeschlossen werden.';er.style.display='block'}finally{calc.disabled=false;calc.textContent='MEINEN CODE BERECHNEN'}}
 
-(function restoreInnerCode(){try{const raw=localStorage.getItem('icsInnerCodeState');if(!raw)return;const d=JSON.parse(raw);if(!d||!d.date||!d.time||!d.place)return;document.getElementById('name').value=d.name||'';document.getElementById('date').value=d.date;document.getElementById('time').value=d.time;document.getElementById('place').value=d.place;if(new URLSearchParams(location.search).get('restore')==='1'){setTimeout(()=>preview(),80)}}catch(e){}})();
+(function restoreInnerCode(){try{const raw=localStorage.getItem('innerCodeReportState');if(!raw)return;const d=JSON.parse(raw);if(!d||!d.date||!d.time||!d.place)return;document.getElementById('name').value=d.name||'';document.getElementById('date').value=d.date;document.getElementById('time').value=d.time;document.getElementById('place').value=d.place;if(new URLSearchParams(location.search).get('restore')==='1'){setTimeout(()=>preview(),80)}}catch(e){}})();
 function updateReadingProgress(){let bar=document.getElementById('readingProgressBar');if(!bar)return;let doc=document.documentElement,max=Math.max(1,doc.scrollHeight-window.innerHeight),pct=Math.max(0,Math.min(100,(window.scrollY/max)*100));bar.style.width=pct+'%'}
 window.addEventListener('scroll',updateReadingProgress,{passive:true});window.addEventListener('resize',updateReadingProgress);setTimeout(updateReadingProgress,250);
 
@@ -696,7 +696,7 @@ async function initInnerCodeCheckout(){
   paypal.Buttons({
    style:{layout:'vertical',shape:'rect',label:'paypal'},
    createOrder:async()=>{payStatus('Bestellung wird vorbereitet …');let r=await fetch(ICS_PAYPAL_API+'/api/paypal/orders',{method:'POST',headers:{'content-type':'application/json'},body:'{}'});let d=await r.json();if(!r.ok||!d.id)throw Error(d.detail||d.message||'Bestellung konnte nicht erstellt werden.');return d.id},
-   onApprove:async data=>{payStatus('Zahlung wird bestätigt …');let r=await fetch(ICS_PAYPAL_API+'/api/paypal/orders/'+encodeURIComponent(data.orderID)+'/capture',{method:'POST'});let d=await r.json();if(!r.ok||!d.paid||!d.accessToken)throw Error('Zahlung wurde nicht bestätigt.');try{localStorage.setItem('icsAccessToken',d.accessToken);if(d.payerEmail)localStorage.setItem('icsAccessEmail',d.payerEmail)}catch(e){}history.replaceState(null,'',location.pathname);payStatus('Zahlung bestätigt. Dein Zugang ist mit deiner PayPal-E-Mail geschützt.','ok');setTimeout(()=>go(1),700)},
+   onApprove:async data=>{payStatus('Zahlung wird bestätigt …');let r=await fetch(ICS_PAYPAL_API+'/api/paypal/orders/'+encodeURIComponent(data.orderID)+'/capture',{method:'POST'});let d=await r.json();if(!r.ok||!d.paid||!d.accessToken)throw Error('Zahlung wurde nicht bestätigt.');try{localStorage.setItem('innerCodeReportAccessToken',d.accessToken);if(d.payerEmail)localStorage.setItem('innerCodeReportAccessEmail',d.payerEmail)}catch(e){}history.replaceState(null,'',location.pathname);payStatus('Zahlung bestätigt. Dein Zugang ist mit deiner PayPal-E-Mail geschützt.','ok');setTimeout(()=>go(1),700)},
    onCancel:()=>payStatus('Zahlung abgebrochen. Du kannst es erneut versuchen.'),
    onError:e=>{console.error(e);payStatus('PayPal-Test konnte nicht abgeschlossen werden. Bitte erneut versuchen.','err')}
   }).render('#paypalButtons');
@@ -710,7 +710,7 @@ async function recoverInnerCodeAccess(){
   let r=await fetch(ICS_PAYPAL_API+'/api/access/recover',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email})});
   let d=await r.json();
   if(r.ok&&d.found&&d.accessToken){
-   try{localStorage.setItem('icsAccessToken',d.accessToken);localStorage.setItem('icsAccessEmail',email.trim().toLowerCase())}catch(x){}
+   try{localStorage.setItem('innerCodeReportAccessToken',d.accessToken);localStorage.setItem('innerCodeReportAccessEmail',email.trim().toLowerCase())}catch(x){}
    payStatus('Zugang gefunden. Willkommen zurück.','ok');setTimeout(()=>go(1),350);return;
   }
   payStatus('Für diese E-Mail wurde noch kein aktiver Zugang gefunden.','err');
@@ -723,16 +723,16 @@ async function ownerAccess(){
  try{
   let r=await fetch(ICS_PAYPAL_API+'/api/admin/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({key})});
   let d=await r.json();
-  if(r.ok&&d.ok&&d.token){try{localStorage.setItem('icsOwnerToken',d.token)}catch(e){}history.replaceState(null,'',location.pathname);go(1);return true}
+  if(r.ok&&d.ok&&d.token){try{localStorage.setItem('innerCodeReportOwnerToken',d.token)}catch(e){}history.replaceState(null,'',location.pathname);go(1);return true}
   payStatus('Zugangspasswort nicht erkannt.','err');
  }catch(e){payStatus('Inhaber-Zugang konnte gerade nicht geprüft werden.','err')}
  return false;
 }
 (async function startCheckout(){
- let ownerToken='';try{ownerToken=localStorage.getItem('icsOwnerToken')||''}catch(x){}
+ let ownerToken='';try{ownerToken=localStorage.getItem('innerCodeReportOwnerToken')||''}catch(x){}
  if(ownerToken){try{let r=await fetch(ICS_PAYPAL_API+'/api/admin/verify',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token:ownerToken})});let d=await r.json();if(r.ok&&d.valid){go(1);return}}catch(x){}}
  if(new URLSearchParams(location.search).get('admin')==='1'){if(await ownerAccess())return}
- let t='',e='';try{t=localStorage.getItem('icsAccessToken')||'';e=localStorage.getItem('icsAccessEmail')||''}catch(x){}
+ let t='',e='';try{t=localStorage.getItem('innerCodeReportAccessToken')||'';e=localStorage.getItem('innerCodeReportAccessEmail')||''}catch(x){}
  if(t&&e){try{let r=await fetch(ICS_PAYPAL_API+'/api/access/verify',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token:t,email:e})});let d=await r.json();if(r.ok&&d.valid){go(1);return}}catch(x){}}
  initInnerCodeCheckout();
  let host=document.getElementById('paypalButtons');
