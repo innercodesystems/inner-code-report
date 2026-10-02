@@ -215,6 +215,18 @@
   }
 }
 
+/* PRINT INFO PANELS · final contrast override */
+@media print{
+  .card .info-panel,.card .info-panel *{
+    color:#ffffff!important;
+    -webkit-text-fill-color:#ffffff!important;
+  }
+  .card .info-panel b,.card .info-panel strong{
+    color:#d4a03a!important;
+    -webkit-text-fill-color:#d4a03a!important;
+  }
+}
+
 /* ONLINE INFO PANELS · improve readability without changing print/report layout */
 @media screen{
   .info-panel{
