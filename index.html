@@ -789,6 +789,8 @@ async function ownerAccess(){
  return false;
 }
 (async function startCheckout(){
+ /* SECURITY: always reset UI to paywall before any access verification. */
+ go(0);
  let ownerToken='';try{ownerToken=localStorage.getItem('innerCodeReportOwnerToken')||''}catch(x){}
  if(ownerToken){try{let r=await fetch(ICS_PAYPAL_API+'/api/admin/verify',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token:ownerToken})});let d=await r.json();if(r.ok&&d.valid){go(1);return}}catch(x){}}
  if(new URLSearchParams(location.search).get('admin')==='1'){if(await ownerAccess())return}
