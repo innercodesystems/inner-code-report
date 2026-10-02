@@ -29,7 +29,7 @@
 /* CALCULATION INFO */
 .calculation-info{border-style:dashed}.calculation-info .small{font-size:12px;line-height:1.65;color:var(--muted)}
 /* PRINT COVER POLISH */
-.print-cover{display:none}@media print{.print-cover{display:flex!important;min-height:92vh;flex-direction:column;justify-content:center;page-break-after:always;padding:18mm}.print-brand{font-size:11pt;letter-spacing:.22em}.print-kicker{margin-top:42mm;font-size:10pt;letter-spacing:.18em}.print-cover h1{font-size:30pt;margin:8mm 0 7mm!important}.print-rule{width:35mm;border-top:1px solid #b8924f;margin:2mm 0 8mm}.print-cover p{max-width:125mm;font-size:13pt;line-height:1.6}}
+.print-cover{display:none}@media print{.print-cover{display:flex!important;min-height:92vh;flex-direction:column;justify-content:center;page-break-after:always;padding:18mm}.print-brand{font-size:11pt;letter-spacing:.22em}; .print-brand{position:relative;top:3mm}.print-kicker{margin-top:42mm;font-size:10pt;letter-spacing:.18em}.print-cover h1{font-size:30pt;margin:8mm 0 4mm}.print-rule{width:35mm;border-top:1px solid #b8924f;margin:2mm 0 8mm}.print-cover p{max-width:125mm;font-size:13pt;line-height:1.6}}
 /* COMPACT PRINT REPORT */
 @media print{
   @page{size:A4;margin:13mm 12mm 14mm}
@@ -283,31 +283,9 @@
 
 /* PAYPAL SANDBOX CHECKOUT · purchase gate */
 .paywall-card{text-align:center}.paywall-price{font-size:34px;font-weight:900;color:var(--cream);margin:8px 0}.paywall-price small{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:5px}.paywall-status{min-height:20px;margin-top:12px;color:var(--muted);font-size:13px;line-height:1.5}.paywall-status.ok{color:#b9d7a8}.paywall-status.err{display:block;color:#e6b7a9}.paypal-wrap{margin-top:16px;min-height:45px}.sandbox-note{font-size:11px;color:#8f826e;margin-top:12px;line-height:1.5}@media print{#s0{display:none!important}}
-/* PRINT COVER · definitive name/rule spacing */
-@media print{
-  #printCover #printPersonName{
-    margin:8mm 0 10mm!important;
-    padding:0 0 2mm!important;
-    line-height:1.25!important;
-  }
-  #printCover .print-rule{
-    margin:0 0 8mm!important;
-  }
-}
+
 /* PRINT FIRST PAGE · title breathing room */
-@media print{
-  #s3 > .hero{
-    padding-top:12mm!important;
-    padding-bottom:14mm!important;
-    margin-bottom:10mm!important;
-  }
-  #s3 > .hero h1{
-    margin-bottom:5mm!important;
-  }
-  #s3 > .hero p{
-    margin-bottom:0!important;
-  }
-}
+@media print{}
 </style></head><body><main class="wrap"><div class="brand">INNER CODE SYSTEMS</div>
 <section id="s0" class="step on"><div class="hero"><div class="orb">✦</div><h1>Dein INNER CODE</h1><p>Deine persönliche astrologische Auswertung als umfangreicher Report.</p></div><div class="card paywall-card"><div class="tag">PERSÖNLICHER INNER CODE</div><div class="paywall-price">49 €<small>einmalig · persönlicher Report</small></div><p>Nach erfolgreicher Zahlung gibst du deine Geburtsdaten ein und erstellst deinen persönlichen INNER CODE.</p><div id="paypalButtons" class="paypal-wrap"></div><div id="payStatus" class="paywall-status">PayPal wird geladen …</div><div class="sandbox-note">TESTMODUS · PayPal Sandbox · Es wird kein echtes Geld belastet.</div></div></section>
 <section id="s1" class="step"><div class="hero"><div class="orb">✦</div><h1>Dein INNER CODE</h1><p>Ein erster Blick auf deinen astrologischen Grundcode – klar, persönlich und ohne Fachsprache.</p></div><div class="card"><div class="tag">DEIN PERSÖNLICHER ASTRO-CODE</div><p>Geburtsdatum, genaue Uhrzeit und Geburtsort genügen.</p><button onclick="go(2)">MEINEN CODE ENTDECKEN</button></div></section>
