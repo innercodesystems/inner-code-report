@@ -775,7 +775,26 @@ async function initInnerCodeCheckout(){
   paypal.Buttons({
    style:{layout:'vertical',shape:'rect',label:'paypal'},
    createOrder:async()=>{payStatus('Bestellung wird vorbereitet …');let r=await fetch(ICS_PAYPAL_API+'/api/paypal/orders',{method:'POST',headers:{'content-type':'application/json'},body:'{}'});let d=await r.json();if(!r.ok||!d.id)throw Error(d.detail||d.message||'Bestellung konnte nicht erstellt werden.');return d.id},
-   onApprove:async data=>{payStatus('Zahlung wird bestätigt …');let r=await fetch(ICS_PAYPAL_API+'/api/paypal/orders/'+encodeURIComponent(data.orderID)+'/capture',{method:'POST'});let d=await r.json();if(!r.ok||!d.paid||!d.accessToken)throw Error('Zahlung wurde nicht bestätigt.');try{localStorage.setItem('innerCodeReportAccessToken',d.accessToken);if(d.payerEmail)localStorage.setItem('innerCodeReportAccessEmail',d.payerEmail)}catch(e){}history.replaceState(null,'',location.pathname);payStatus('Zahlung bestätigt. Dein Zugang ist mit deiner PayPal-E-Mail geschützt.','ok');setTimeout(()=>go(1),700)},
+   onApprove:async data=>{payStatus('Zahlung wird bestätigt …');let r=await fetch(ICS_PAYPAL_API+'/api/paypal/orders/'+encodeURIComponent(data.orderID)+'/capture',{method:'POST'});let d=await r.json();if(!r.ok||!d.paid||!d.accessToken)throw Error('Zahlung wurde nicht bestätigt.');try{localStorage.setItem('innerCodeReportAccessToken',d.accessToken);if(d.payerEmail)localStorage.setItem('innerCodeReportAccessEmail',d.payerEmail)}catch(e){}
+   /* Vertragsbestätigung als dauerhaft speicherbare Datei bereitstellen */
+   try{
+    const now=new Date().toLocaleString('de-DE');
+    const confirmation='INNER CODE SYSTEMS – VERTRAGSBESTÄTIGUNG\n\n'
+     +'Produkt: Persönlicher INNER CODE – digitaler persönlicher Report\n'
+     +'Preis: 49,00 EUR einmalig\n'
+     +'Bestell-/PayPal-ID: '+data.orderID+'\n'
+     +'Käufer-E-Mail: '+(d.payerEmail||'PayPal-Konto')+'\n'
+     +'Vertragsschluss/Zahlungsbestätigung: '+now+'\n\n'
+     +'ANBIETER\nINNER CODE SYSTEMS · Peter Wicklein\nMühlenstraße 24 · 88662 Überlingen · Deutschland\nE-Mail: info@innercodesystems.com\n\n'
+     +'DIGITALER INHALT UND WIDERRUF\n'
+     +'Vor der Zahlung haben Sie ausdrücklich zugestimmt, dass INNER CODE SYSTEMS vor Ablauf der Widerrufsfrist mit der Bereitstellung des digitalen INNER CODE beginnt. Sie haben bestätigt, dass Ihnen bekannt ist, dass Sie mit Beginn der Ausführung Ihr Widerrufsrecht verlieren.\n\n'
+     +'Bereitstellung: Der persönliche INNER CODE kann unmittelbar nach bestätigter Zahlung durch Eingabe der Geburtsdaten erstellt und genutzt werden.\n\n'
+     +'Impressum: https://www.innercodesystems.com/impressum.html\n'
+     +'Datenschutz: https://www.innercodesystems.com/datenschutz.html\n';
+    const blob=new Blob([confirmation],{type:'text/plain;charset=utf-8'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='INNER-CODE-Vertragsbestaetigung-'+data.orderID+'.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+   }catch(x){console.warn('Vertragsbestätigung konnte nicht automatisch gespeichert werden.',x)}
+   history.replaceState(null,'',location.pathname);payStatus('Zahlung bestätigt. Deine Vertragsbestätigung wurde zum Speichern bereitgestellt.','ok');setTimeout(()=>go(1),1100)},
    onCancel:()=>payStatus('Zahlung abgebrochen. Du kannst es erneut versuchen.'),
    onError:e=>{console.error(e);payStatus('PayPal-Test konnte nicht abgeschlossen werden. Bitte erneut versuchen.','err')}
   }).render('#paypalButtons');
