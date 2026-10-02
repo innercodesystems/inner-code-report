@@ -227,6 +227,18 @@
   }
 }
 
+/* PRINT DEEP PANELS · readable text inside dark relationship/detail boxes */
+@media print{
+  .card .deep-panel,.card .deep-panel p,.card .deep-panel span,.card .deep-panel li{
+    color:#ffffff!important;
+    -webkit-text-fill-color:#ffffff!important;
+  }
+  .card .deep-panel b,.card .deep-panel strong,.card .deep-panel h3{
+    color:#d4a03a!important;
+    -webkit-text-fill-color:#d4a03a!important;
+  }
+}
+
 /* ONLINE INFO PANELS · improve readability without changing print/report layout */
 @media screen{
   .info-panel{
