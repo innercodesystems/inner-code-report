@@ -239,6 +239,28 @@
   }
 }
 
+/* PRINT DEEP PANEL FINAL OVERRIDE · direct text node inherits explicit white */
+@media print{
+  .deep-panel{
+    background:#171512!important;
+    color:#ffffff!important;
+    -webkit-text-fill-color:#ffffff!important;
+  }
+  .deep-panel h3,.deep-panel b,.deep-panel strong{
+    color:#d4a03a!important;
+    -webkit-text-fill-color:#d4a03a!important;
+  }
+  .deep-panel .deep-action{
+    background:#faf7f1!important;
+    color:#1a1815!important;
+    -webkit-text-fill-color:#1a1815!important;
+  }
+  .deep-panel .deep-action b,.deep-panel .deep-action strong{
+    color:#8a672d!important;
+    -webkit-text-fill-color:#8a672d!important;
+  }
+}
+
 /* ONLINE INFO PANELS · improve readability without changing print/report layout */
 @media screen{
   .info-panel{
