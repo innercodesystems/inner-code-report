@@ -289,6 +289,8 @@
 
 /* PAYPAL SANDBOX CHECKOUT · purchase gate */
 .paywall-card{text-align:center}.paywall-price{font-size:34px;font-weight:900;color:var(--cream);margin:8px 0}.paywall-price small{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:5px}.paywall-status{min-height:20px;margin-top:12px;color:var(--muted);font-size:13px;line-height:1.5}.paywall-status.ok{color:#b9d7a8}.paywall-status.err{display:block;color:#e6b7a9}.paypal-wrap{margin-top:16px;min-height:45px}.sandbox-note{font-size:11px;color:#8f826e;margin-top:12px;line-height:1.5}@media print{#s0{display:none!important}}
+.site-footer{margin-top:34px;padding:28px 20px;background:#12110f;border-top:1px solid #b8924f55;text-align:center;color:#9e9588;font-size:12px;line-height:1.7}.site-footer strong{display:block;color:#b8924f;font-family:Georgia,"Times New Roman",serif;font-size:16px;letter-spacing:.08em;margin-bottom:8px}.site-footer a{color:#d8c7a5;text-decoration:none;margin:0 8px}.site-footer a:hover{color:#fff}
+@media print{.site-footer{display:none!important}}
 </style></head><body><main class="wrap"><div class="brand">INNER CODE SYSTEMS</div>
 <section id="s0" class="step on"><div class="hero"><div class="orb">✦</div><h1>Dein INNER CODE</h1><p>Deine persönliche astrologische Auswertung als umfangreicher Report.</p></div><div class="card paywall-card"><div class="tag">PERSÖNLICHER INNER CODE</div><div class="paywall-price">49 €<small>einmalig · persönlicher Report</small></div><p>Nach erfolgreicher Zahlung gibst du deine Geburtsdaten ein und erstellst deinen persönlichen INNER CODE.</p>
 <button type="button" class="preview-btn" onclick="document.getElementById('reportPreview').classList.add('on');document.body.style.overflow='hidden'">VORSCHAU AUF DEN REPORT ANSEHEN</button>
@@ -899,4 +901,4 @@ async function ownerAccess(){
  let host=document.getElementById('paypalButtons');
  if(host&&!document.getElementById('accessRecoveryBtn')){let b=document.createElement('button');b.id='accessRecoveryBtn';b.type='button';b.className='btn secondary';b.style.marginTop='12px';b.textContent='BEREITS GEKAUFT? ZUGANG ÖFFNEN';b.onclick=recoverInnerCodeAccess;host.parentNode.appendChild(b)}
 })();
-</script></body></html>
+</script><footer class="site-footer"><strong>INNER CODE SYSTEMS</strong><div>Persönlicher INNER CODE · Astrologischer Reflexionsreport</div><div><a href="https://www.innercodesystems.com/impressum.html" target="_blank" rel="noopener">Impressum</a><a href="https://www.innercodesystems.com/datenschutz.html" target="_blank" rel="noopener">Datenschutz</a><a href="#" onclick="event.preventDefault();const w=document.getElementById('withdrawalInfo');if(w){w.open=true;w.scrollIntoView({behavior:'smooth',block:'center'})}">Widerruf</a></div><div>© INNER CODE SYSTEMS</div></footer></body></html>
