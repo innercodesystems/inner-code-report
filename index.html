@@ -330,7 +330,21 @@
 <p>Zur Wahrung der Widerrufsfrist reicht es aus, dass Sie die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absenden.</p>
 <p><strong>Folgen des Widerrufs</strong><br>Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf dieses Vertrags bei uns eingegangen ist. Für diese Rückzahlung verwenden wir dasselbe Zahlungsmittel, das Sie bei der ursprünglichen Transaktion eingesetzt haben, es sei denn, mit Ihnen wurde ausdrücklich etwas anderes vereinbart; in keinem Fall werden Ihnen wegen dieser Rückzahlung Entgelte berechnet.</p>
 <p><strong>Vorzeitiges Erlöschen des Widerrufsrechts bei digitalen Inhalten</strong><br>Bei dem Persönlichen INNER CODE handelt es sich um einen nicht auf einem körperlichen Datenträger bereitgestellten digitalen Inhalt. Bei einem kostenpflichtigen Vertrag erlischt das Widerrufsrecht mit Beginn der Vertragserfüllung, wenn Sie ausdrücklich zugestimmt haben, dass wir vor Ablauf der Widerrufsfrist mit der Vertragserfüllung beginnen, Sie Ihre Kenntnis davon bestätigt haben, dass Sie durch diese Zustimmung mit Beginn der Vertragserfüllung Ihr Widerrufsrecht verlieren, und wir Ihnen eine Vertragsbestätigung gemäß § 312f BGB zur Verfügung gestellt haben.</p>
-<p><a href="mailto:info@innercodesystems.com?subject=Widerruf%20Pers%C3%B6nlicher%20INNER%20CODE&body=Hiermit%20widerrufe%20ich%20den%20Vertrag%20%C3%BCber%20den%20Pers%C3%B6nlichen%20INNER%20CODE.%0A%0AName%3A%0ABestell-%2FPayPal-ID%3A%0AE-Mail%3A" style="display:block;padding:12px 14px;border:1px solid #b8924f;border-radius:10px;color:#171512;background:#b8924f;text-decoration:none;font-weight:800;text-align:center">VERTRAG WIDERRUFEN</a></p>
+<div class="withdrawal-box" style="margin-top:16px;padding:16px;border:1px solid #b8924f66;border-radius:12px;background:#171512">
+<button type="button" id="withdrawalOpen" onclick="openWithdrawalForm()" style="width:100%;padding:12px 14px;border:1px solid #b8924f;border-radius:10px;color:#171512;background:#b8924f;font-weight:800;cursor:pointer">VERTRAG WIDERRUFEN</button>
+<div id="withdrawalForm" style="display:none;margin-top:16px;text-align:left">
+<p style="margin-top:0"><strong>Widerruf online erklären</strong><br>Bitte gib die Daten an, mit denen wir deinen Vertrag eindeutig zuordnen können.</p>
+<label for="withdrawalName">Name *</label>
+<input id="withdrawalName" autocomplete="name" style="width:100%;box-sizing:border-box;margin:6px 0 12px;padding:11px;border:1px solid #b8924f66;border-radius:8px;background:#211e1a;color:#f6f1e7" />
+<label for="withdrawalEmail">E-Mail *</label>
+<input id="withdrawalEmail" type="email" autocomplete="email" style="width:100%;box-sizing:border-box;margin:6px 0 12px;padding:11px;border:1px solid #b8924f66;border-radius:8px;background:#211e1a;color:#f6f1e7" />
+<label for="withdrawalOrder">Bestell-/PayPal-ID <span style="font-weight:400;color:#9e9588">(falls vorhanden)</span></label>
+<input id="withdrawalOrder" style="width:100%;box-sizing:border-box;margin:6px 0 12px;padding:11px;border:1px solid #b8924f66;border-radius:8px;background:#211e1a;color:#f6f1e7" />
+<p style="font-size:13px;line-height:1.5">Erklärung: „Hiermit widerrufe ich den Vertrag über den Persönlichen INNER CODE.“</p>
+<button type="button" id="withdrawalConfirm" onclick="submitWithdrawal()" style="width:100%;padding:12px 14px;border:1px solid #b8924f;border-radius:10px;color:#171512;background:#b8924f;font-weight:800;cursor:pointer">WIDERRUF BESTÄTIGEN</button>
+<div id="withdrawalStatus" aria-live="polite" style="margin-top:12px;font-size:13px;line-height:1.5"></div>
+</div>
+</div>
 <hr style="border:0;border-top:1px solid #b8924f44;margin:18px 0">
 <p><strong style="color:#b8924f">Muster-Widerrufsformular</strong><br>
 <small>(Wenn Sie den Vertrag widerrufen wollen, können Sie dieses Formular verwenden und an uns senden.)</small></p>
@@ -929,4 +943,43 @@ async function ownerAccess(){
  let host=document.getElementById('paypalButtons');
  if(host&&!document.getElementById('accessRecoveryBtn')){let b=document.createElement('button');b.id='accessRecoveryBtn';b.type='button';b.className='btn secondary';b.style.marginTop='12px';b.textContent='BEREITS GEKAUFT? ZUGANG ÖFFNEN';b.onclick=recoverInnerCodeAccess;host.parentNode.appendChild(b)}
 })();
+
+function openWithdrawalForm(){
+ const f=document.getElementById('withdrawalForm');
+ if(f)f.style.display='block';
+ const n=document.getElementById('withdrawalName');
+ if(n)n.focus();
+}
+async function submitWithdrawal(){
+ const name=(document.getElementById('withdrawalName')?.value||'').trim();
+ const email=(document.getElementById('withdrawalEmail')?.value||'').trim();
+ const orderId=(document.getElementById('withdrawalOrder')?.value||'').trim();
+ const status=document.getElementById('withdrawalStatus');
+ const btn=document.getElementById('withdrawalConfirm');
+ if(!name||!email){if(status){status.style.color='#e6b7a9';status.textContent='Bitte Name und E-Mail vollständig eingeben.'}return}
+ if(btn){btn.disabled=true;btn.textContent='WIDERRUF WIRD ÜBERMITTELT …'}
+ try{
+  const r=await fetch(ICS_PAYPAL_API+'/api/withdrawal',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name,email,orderId})});
+  const d=await r.json();
+  if(!r.ok||!d.ok)throw new Error(d.error||'Übermittlung fehlgeschlagen');
+  const received=new Date(d.receivedAt||Date.now());
+  const stamp=received.toLocaleString('de-DE',{dateStyle:'medium',timeStyle:'medium'});
+  const confirmation='INNER CODE SYSTEMS – BESTÄTIGUNG DES WIDERRUFS\n\n'+
+   'Produkt: Persönlicher INNER CODE\n'+
+   'Name: '+name+'\n'+
+   'E-Mail: '+email+'\n'+
+   (orderId?'Bestell-/PayPal-ID: '+orderId+'\n':'')+
+   'Erklärung: '+(d.declaration||'Hiermit widerrufe ich den Vertrag über den Persönlichen INNER CODE.')+'\n'+
+   'Eingang: '+stamp+'\n'+
+   (d.withdrawalId?'Widerrufs-ID: '+d.withdrawalId+'\n':'')+
+   '\nEmpfänger:\nINNER CODE SYSTEMS · Peter Wicklein\nMühlenstraße 24 · 88662 Überlingen · Deutschland\nE-Mail: info@innercodesystems.com\n';
+  const blob=new Blob([confirmation],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='INNER-CODE-Widerruf-Bestaetigung.txt';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);
+  if(status){status.style.color='#b9d7a8';status.innerHTML='<strong>Widerruf eingegangen.</strong><br>Deine Erklärung wurde gespeichert. Datum und Uhrzeit: '+stamp+'. Eine Bestätigung wurde zum Speichern bereitgestellt.'}
+  if(btn){btn.textContent='WIDERRUF EINGEGANGEN';btn.disabled=true}
+ }catch(e){
+  if(status){status.style.color='#e6b7a9';status.textContent='Der Widerruf konnte gerade nicht übermittelt werden. Bitte versuche es erneut oder nutze info@innercodesystems.com.'}
+  if(btn){btn.disabled=false;btn.textContent='WIDERRUF BESTÄTIGEN'}
+ }
+}
 </script><footer class="site-footer"><strong>INNER CODE SYSTEMS</strong><div>Peter Wicklein · Persönlicher INNER CODE · Astrologischer Reflexionsreport</div><div><a href="https://www.innercodesystems.com/" target="_blank" rel="noopener">Webseite</a><a href="https://www.innercodesystems.com/ics-akademie.html" target="_blank" rel="noopener">ICS Akademie</a><a href="https://www.innercodesystems.com/impressum.html" target="_blank" rel="noopener">Impressum</a><a href="https://www.innercodesystems.com/datenschutz.html" target="_blank" rel="noopener">Datenschutz</a><a href="#" onclick="event.preventDefault();const w=document.getElementById('withdrawalInfo');if(w){w.open=true;w.scrollIntoView({behavior:'smooth',block:'center'})}">Widerruf</a></div><div>© INNER CODE SYSTEMS</div></footer></body></html>
