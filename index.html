@@ -927,13 +927,6 @@ async function ownerAccess(){
 (async function startCheckout(){
  /* SECURITY: always reset UI to paywall before any access verification. */
  go(0);
- /* Temporary visual test for the post-purchase thank-you view. Does not grant access or call PayPal. */
- if(new URLSearchParams(location.search).get('test')==='danke'){
-  document.querySelectorAll('.step').forEach(x=>x.classList.remove('on'));
-  const successView=document.getElementById('purchaseSuccess');
-  if(successView){successView.classList.add('on');window.scrollTo(0,0)}
-  return;
- }
  let ownerToken='';try{ownerToken=localStorage.getItem('innerCodeReportOwnerToken')||''}catch(x){}
  if(ownerToken){try{let r=await fetch(ICS_PAYPAL_API+'/api/admin/verify',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({token:ownerToken})});let d=await r.json();if(r.ok&&d.valid){go(1);return}}catch(x){}}
  if(new URLSearchParams(location.search).get('admin')==='1'){if(await ownerAccess())return}
